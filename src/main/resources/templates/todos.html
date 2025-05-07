@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Todo Manager</title>
+    <style>
+        body {
+            background-image: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png');
+            font-family: 'SamsungOne', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+<header class="bg-gradient-to-r from-blue-500 to-purple-600 w-full py-6 shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-6">
+        <h1 class="text-white text-3xl font-bold" th:text="'Welcome ' + ${loggedInUser.username} + ' to Your Todo Manager'"></h1>
+        <a href="/logout" class="text-white bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</a>
+    </div>
+</header>
+
+<main class="w-full max-w-4xl mt-8">
+    <!-- Add Todo Form -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-lg font-medium text-blue-800 mb-4">Add a New Todo</h2>
+        <form action="/todos" method="post" class="flex flex-col gap-4">
+            <input type="text" name="title" placeholder="Todo Title" required
+                   class="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <textarea name="description" placeholder="Todo Description" required
+                      class="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <button type="submit"
+                    class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                Add Todo
+            </button>
+        </form>
+    </div>
+
+    <!-- Todos List -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-medium text-blue-800 mb-4">Your Todos</h2>
+        <div class="space-y-4">
+            <th:block th:each="todo : ${todos}">
+                <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+                    <div>
+                        <h3 class="text-base font-semibold text-gray-800" th:text="${todo.title}">Task Title</h3>
+                        <p class="text-sm text-gray-600" th:text="${todo.description}">Task Description</p>
+                        <p class="text-sm font-medium"
+                           th:classappend="${todo.completed} ? 'text-green-600' : 'text-gray-600'"
+                           th:text="${todo.completed} ? 'Status: Completed' : 'Status: Pending'"></p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- Toggle Button -->
+                        <a th:href="@{'/todos/' + ${todo.id} + '/toggle'}"
+                           class="bg-blue-600 text-white py-1 px-3 rounded-lg hover:bg-blue-700 transition">
+                            Toggle
+                        </a>
+                        <!-- Edit Button -->
+                        <a th:href="@{'/todos/' + ${todo.id} + '/edit'}"
+                           class="bg-gray-500 text-white py-1 px-3 rounded-lg hover:bg-gray-400 transition">
+                            Edit
+                        </a>
+                        <!-- Delete Button -->
+                        <a th:href="@{'/todos/' + ${todo.id} + '/delete'}"
+                           class="bg-red-600 text-white py-1 px-3 rounded-lg hover:bg-red-500 transition">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>
