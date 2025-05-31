@@ -113,6 +113,38 @@ FLUSH PRIVILEGES;
 exit;
 ```
 
+### 3. Database Tables (Auto-created by Spring Boot)
+
+The application uses **Spring Data JPA** with `hibernate.ddl-auto=update`, which means the tables will be **automatically created** when you first run the application. Here's what tables will be generated:
+
+#### **User Table**
+```sql
+CREATE TABLE user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+```
+
+#### **Todo Table**
+```sql
+CREATE TABLE todo (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    completed BOOLEAN DEFAULT FALSE,
+    created_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+```
+
+> **Note**: You **don't need to create these tables manually**. Spring Boot JPA will automatically create them when the application starts for the first time. The `hibernate.ddl-auto=update` setting ensures that:
+> - Tables are created if they don't exist
+> - Existing data is preserved when you restart the application
+> - Schema changes are applied automatically
+
 ## Project Setup
 
 ### Method 1: Using IntelliJ IDEA (Recommended)
