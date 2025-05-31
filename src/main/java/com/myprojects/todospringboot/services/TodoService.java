@@ -27,7 +27,7 @@ public class TodoService {
         todo.setUser(user);
         todoRepository.save(todo);
     }
-
+    
     public void deleteTodoForUser(Long id, User user) {
         todoRepository.findById(id).ifPresent(todo -> {
             if (todo.getUser().equals(user)) {
